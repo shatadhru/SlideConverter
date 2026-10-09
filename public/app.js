@@ -157,7 +157,7 @@ async function handleS1File(file) {
 
   try {
     const arrayBuffer = await file.arrayBuffer();
-    s1.rawPdfBytes = arrayBuffer;
+    s1.rawPdfBytes = arrayBuffer.slice(0);
     s1.pdfDoc = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
     s1.numPages = s1.pdfDoc.numPages;
     s1.currentPage = 1;
@@ -664,7 +664,7 @@ async function handleS2File(file) {
 
   try {
     const arrayBuffer = await file.arrayBuffer();
-    s2.rawPdfBytes = arrayBuffer;
+    s2.rawPdfBytes = arrayBuffer.slice(0);
     s2.pdfDoc = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
     s2.numPages = s2.pdfDoc.numPages;
 
@@ -843,7 +843,7 @@ s2.exportBtn.addEventListener('click', async () => {
   s2.progressText.textContent = 'Extracting selected pages...';
 
   try {
-    const sourceDoc = await pdfLib.PDFDocument.load(s2.rawPdfBytes);
+    const sourceDoc = await pdfLib.PDFDocument.load(s2.rawPdfBytes.slice(0));
     const newDoc = await pdfLib.PDFDocument.create();
 
     const sortedPageNums = Array.from(s2.selectedPages).sort((a, b) => a - b);
