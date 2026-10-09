@@ -1,0 +1,25 @@
+{
+  "name": "slide-converter",
+  "version": "1.0.0",
+  "description": "Minimal, high-performance slide converter and PDF page selector built with Express.js and clean shadcn-inspired UI",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "pdf",
+    "slide-converter",
+    "invert",
+    "grayscale",
+    "shadcn",
+    "express"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.21.2",
+    "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^3.11.174"
+  }
+}

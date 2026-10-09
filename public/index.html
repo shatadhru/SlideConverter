@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>SlideConvert</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- Local Vendor Scripts (Zero CDN dependency, 100% offline & fast) -->
+  <script src="/vendor/pdf.min.js"></script>
+  <script src="/vendor/pdf-lib.min.js"></script>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-inner">
+        <div class="brand">
+          <div class="logo-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 22h14a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v4"/>
+              <path d="M14 2v4a2 2 0 0 0 2 2h4"/>
+              <path d="M3 15h6"/>
+              <path d="M6 12v6"/>
+            </svg>
+          </div>
+          <h1 class="logo-title">SlideConvert</h1>
+        </div>
+
+        <!-- Navigation Segment Tabs -->
+        <nav class="segment-tabs" role="tablist">
+          <button class="tab-btn active" id="tab-segment-1" data-target="segment-1" role="tab" aria-selected="true">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 2a10 10 0 0 1 0 20Z" fill="currentColor"/>
+            </svg>
+            <span>Slide Inverter & Depth</span>
+          </button>
+
+          <button class="tab-btn" id="tab-segment-2" data-target="segment-2" role="tab" aria-selected="false">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect width="18" height="18" x="3" y="3" rx="2"/>
+              <path d="m9 12 2 2 4-4"/>
+            </svg>
+            <span>Selective Page Extractor</span>
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <!-- SEGMENT 1: Slide Inverter & Text Depth (NO SIDEBAR — TOP CONTROL BAR) -->
+    <main id="segment-1" class="tab-content active">
+      <!-- TOP CONTROL BAR -->
+      <section class="top-control-bar card">
+        <!-- Row 1: File Actions -->
+        <div class="ctrl-row-primary">
+          <div class="file-picker-group">
+            <input type="file" id="s1-file-input" accept="application/pdf" class="file-input-hidden">
+            <button type="button" class="btn btn-outline" id="s1-btn-browse">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="17 8 12 3 7 8"/>
+                <line x1="12" y1="3" x2="12" y2="15"/>
+              </svg>
+              <span>Upload PDF</span>
+            </button>
+            <button type="button" class="btn btn-secondary" id="s1-btn-load-sample" title="Load sample test.pdf with 8 slides">
+              ⚡ Load Test Slide
+            </button>
+            <div class="loaded-file-pill hidden" id="s1-file-info">
+              <span class="file-pill-name" id="s1-file-name">document.pdf</span>
+              <button type="button" class="pill-remove" id="s1-clear-file" title="Remove">&times;</button>
+            </div>
+          </div>
+
+          <!-- Main Export Button -->
+          <div class="export-group">
+            <button id="s1-btn-export" class="btn btn-primary" disabled>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              <span>Export PDF</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Row 2: Comprehensive Controls Toolbar (Responsive Wrap) -->
+        <div class="ctrl-row-secondary">
+          <!-- Toggle Switches -->
+          <div class="ctrl-group">
+            <label class="compact-toggle">
+              <input type="checkbox" id="s1-opt-invert" class="toggle-checkbox" checked>
+              <span class="toggle-switch"></span>
+              <span class="toggle-text">Invert</span>
+            </label>
+
+            <label class="compact-toggle">
+              <input type="checkbox" id="s1-opt-grayscale" class="toggle-checkbox" checked>
+              <span class="toggle-switch"></span>
+              <span class="toggle-text">Grayscale</span>
+            </label>
+          </div>
+
+          <!-- Text Depth Slider -->
+          <div class="ctrl-group slider-ctrl">
+            <div class="ctrl-label-wrap">
+              <span class="ctrl-label">Black Depth</span>
+              <span class="ctrl-badge" id="s1-depth-val">75%</span>
+            </div>
+            <input type="range" id="s1-opt-depth" min="0" max="100" value="75" class="slider-range">
+          </div>
+
+          <!-- Clean Background Slider -->
+          <div class="ctrl-group slider-ctrl">
+            <div class="ctrl-label-wrap">
+              <span class="ctrl-label">Bg Clean</span>
+              <span class="ctrl-badge" id="s1-bgclean-val">85%</span>
+            </div>
+            <input type="range" id="s1-opt-bgclean" min="50" max="100" value="85" class="slider-range">
+          </div>
+
+          <!-- Orientation -->
+          <div class="ctrl-group select-ctrl">
+            <span class="ctrl-label">Orientation</span>
+            <select id="s1-orientation" class="select-input compact-select">
+              <option value="portrait" selected>Portrait</option>
+              <option value="landscape">Landscape</option>
+              <option value="auto">Auto</option>
+            </select>
+          </div>
+
+          <!-- Margins / Padding -->
+          <div class="ctrl-group select-ctrl">
+            <span class="ctrl-label">Padding</span>
+            <select id="s1-margin" class="select-input compact-select">
+              <option value="0">Zero (0mm)</option>
+              <option value="4" selected>Minimal (4mm)</option>
+              <option value="8">Compact (8mm)</option>
+              <option value="15">Standard (15mm)</option>
+            </select>
+          </div>
+
+          <!-- Slides Per Page (Includes 8 slides in 2 columns) -->
+          <div class="ctrl-group select-ctrl">
+            <span class="ctrl-label">Slides / Page</span>
+            <select id="s1-slides-per-page" class="select-input compact-select highlight-select">
+              <option value="8" selected>8 Slides (2 cols x 4 rows)</option>
+              <option value="6">6 Slides (2 cols x 3 rows)</option>
+              <option value="4">4 Slides (2 cols x 2 rows)</option>
+              <option value="2">2 Slides (1 col x 2 rows)</option>
+              <option value="1">1 Slide (Full page)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Progress bar container -->
+        <div id="s1-progress-bar-container" class="progress-container hidden">
+          <div class="progress-bar" id="s1-progress-bar" style="width: 0%"></div>
+          <span class="progress-text" id="s1-progress-text">Processing...</span>
+        </div>
+      </section>
+
+      <!-- PREVIEW AREA (FULL WIDTH) -->
+      <section class="preview-panel card">
+        <div class="preview-header">
+          <div class="preview-controls-left">
+            <div class="view-toggle-group">
+              <button type="button" class="btn-toggle active" id="s1-view-enhanced">Enhanced</button>
+              <button type="button" class="btn-toggle" id="s1-view-original">Original</button>
+              <button type="button" class="btn-toggle" id="s1-view-split">Split</button>
+            </div>
+          </div>
+          
+          <div class="page-stepper">
+            <button type="button" class="btn-icon" id="s1-prev-page" disabled title="Previous">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+            <span class="page-counter" id="s1-page-info">Slide 0 / 0</span>
+            <button type="button" class="btn-icon" id="s1-next-page" disabled title="Next">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Canvas Stage -->
+        <div class="preview-stage" id="s1-preview-stage">
+          <div class="placeholder-state" id="s1-placeholder">
+            <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/>
+              <circle cx="9" cy="9" r="2"/>
+              <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
+            </svg>
+            <p class="placeholder-title">No PDF Loaded</p>
+            <p class="placeholder-sub">Click "Upload PDF" or "⚡ Load Test Slide" above to preview.</p>
+          </div>
+
+          <!-- Enhanced Canvas View -->
+          <div class="canvas-wrapper hidden" id="s1-canvas-wrapper">
+            <div class="preview-canvas-container" id="s1-canvas-container">
+              <canvas id="s1-preview-canvas"></canvas>
+            </div>
+          </div>
+
+          <!-- Split Comparison View -->
+          <div class="split-view-container hidden" id="s1-split-container">
+            <div class="split-box">
+              <span class="split-tag">Original</span>
+              <canvas id="s1-split-original"></canvas>
+            </div>
+            <div class="split-box">
+              <span class="split-tag highlight">Enhanced (Inverted & Deep Black)</span>
+              <canvas id="s1-split-enhanced"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide Thumbnails Strip -->
+        <div class="thumbnail-strip-wrapper hidden" id="s1-thumb-strip-wrapper">
+          <div class="thumbnail-strip" id="s1-thumb-strip"></div>
+        </div>
+      </section>
+    </main>
+
+    <!-- SEGMENT 2: Selective Page Extractor (TOP TOOLBAR, NO SIDEBAR) -->
+    <main id="segment-2" class="tab-content">
+      <div class="segment-container card">
+        <!-- Top Action & Selection Bar -->
+        <div class="s2-top-bar">
+          <div class="file-picker-group">
+            <input type="file" id="s2-file-input" accept="application/pdf" class="file-input-hidden">
+            <button type="button" class="btn btn-outline" id="s2-btn-browse">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+              </svg>
+              <span>Upload PDF</span>
+            </button>
+            <button type="button" class="btn btn-secondary" id="s2-btn-load-sample" title="Load sample test.pdf with 8 slides">
+              ⚡ Load Test PDF
+            </button>
+            <div class="loaded-file-pill hidden" id="s2-file-info">
+              <span class="file-pill-name" id="s2-file-name">document.pdf</span>
+              <button type="button" class="pill-remove" id="s2-clear-file" title="Remove">&times;</button>
+            </div>
+          </div>
+
+          <!-- Quick Selection Tools -->
+          <div class="toolbar" id="s2-toolbar">
+            <button type="button" class="btn btn-outline btn-sm" id="s2-select-all" disabled>Select All</button>
+            <button type="button" class="btn btn-outline btn-sm" id="s2-deselect-all" disabled>Deselect All</button>
+            <button type="button" class="btn btn-outline btn-sm" id="s2-select-odd" disabled>Odd</button>
+            <button type="button" class="btn btn-outline btn-sm" id="s2-select-even" disabled>Even</button>
+            
+            <div class="range-selector">
+              <input type="text" id="s2-range-input" class="range-input" placeholder="e.g. 1-3, 5, 8" disabled>
+              <button type="button" class="btn btn-secondary btn-sm" id="s2-apply-range" disabled>Apply</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sticky Selection Bar -->
+        <div class="selection-status-bar hidden" id="s2-selection-bar">
+          <div class="selection-meta">
+            <span class="status-badge" id="s2-selected-count">0 of 0 Pages Selected</span>
+            <span class="status-sub" id="s2-selected-pages-list">None</span>
+          </div>
+
+          <button id="s2-btn-export" class="btn btn-primary" disabled>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            <span>Export Selected (PDF)</span>
+          </button>
+        </div>
+
+        <!-- Progress Indicator -->
+        <div id="s2-progress-container" class="progress-container hidden">
+          <div class="progress-bar" id="s2-progress-bar" style="width: 0%"></div>
+          <span class="progress-text" id="s2-progress-text">Exporting pages...</span>
+        </div>
+
+        <!-- Pages Grid -->
+        <div class="pages-grid-wrapper" id="s2-grid-wrapper">
+          <div class="placeholder-state" id="s2-placeholder">
+            <p class="placeholder-title">No PDF Loaded</p>
+            <p class="placeholder-sub">Click "Upload PDF" or "⚡ Load Test PDF" to pick pages.</p>
+          </div>
+
+          <div class="pages-grid hidden" id="s2-pages-grid"></div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <span>SlideConvert</span>
+    </footer>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
